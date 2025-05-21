@@ -19,7 +19,6 @@ type Note struct {
 
 var notes []Note
 
-// Get all notes with pretty JSON
 func getNotes(w http.ResponseWriter, r *http.Request) {
     w.Header().Set("Content-Type", "application/json")
 
@@ -36,7 +35,6 @@ func getNotes(w http.ResponseWriter, r *http.Request) {
     w.Write(jsonData)
 }
 
-// View notes as simple HTML page
 func viewNotes(w http.ResponseWriter, r *http.Request) {
     w.Header().Set("Content-Type", "text/html; charset=utf-8")
     html := `<html><head><title>Daftar Notes</title>
@@ -60,9 +58,6 @@ func viewNotes(w http.ResponseWriter, r *http.Request) {
     w.Write([]byte(html))
 }
 
-// (fungsi lainnya tetap sama)
-
-// Get single note
 func getNote(w http.ResponseWriter, r *http.Request) {
     params := mux.Vars(r)
     for _, note := range notes {
@@ -75,7 +70,6 @@ func getNote(w http.ResponseWriter, r *http.Request) {
     http.Error(w, "Note not found", http.StatusNotFound)
 }
 
-// Create new note
 func createNote(w http.ResponseWriter, r *http.Request) {
     var note Note
     err := json.NewDecoder(r.Body).Decode(&note)
@@ -89,7 +83,6 @@ func createNote(w http.ResponseWriter, r *http.Request) {
     json.NewEncoder(w).Encode(note)
 }
 
-// Update note
 func updateNote(w http.ResponseWriter, r *http.Request) {
     params := mux.Vars(r)
     for i, note := range notes {
@@ -111,7 +104,6 @@ func updateNote(w http.ResponseWriter, r *http.Request) {
     http.Error(w, "Note not found", http.StatusNotFound)
 }
 
-// Delete note
 func deleteNote(w http.ResponseWriter, r *http.Request) {
     params := mux.Vars(r)
     for i, note := range notes {
@@ -127,7 +119,6 @@ func deleteNote(w http.ResponseWriter, r *http.Request) {
 func main() {
     r := mux.NewRouter()
 
-    // Routes
     r.HandleFunc("/notes", getNotes).Methods("GET")
     r.HandleFunc("/notes/view", viewNotes).Methods("GET")
     r.HandleFunc("/notes/{id}", getNote).Methods("GET")
